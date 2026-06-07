@@ -62,7 +62,7 @@ python3 coordinator/coordinator.py --host 0.0.0.0 --port 5679
 
 # Terminal 2
 python3 tests/test_mutex.py \
-    --scoreboard 3.227.138.6:5678 \
+    --scoreboard 44.211.92.88:5678 \
     --coordinator localhost:5679 \
     --players 3 --rounds 5 --instance-id peer1
 ```
@@ -70,16 +70,16 @@ python3 tests/test_mutex.py \
 **instância-peer2:**
 ```bash
 python3 tests/test_mutex.py \
-    --scoreboard 3.227.138.6:5678 \
-    --coordinator 35.173.215.251:5679 \
+    --scoreboard 44.211.92.88:5678 \
+    --coordinator 3.215.153.77:5679 \
     --players 3 --rounds 5 --instance-id peer2
 ```
 
 **instância-peer3:**
 ```bash
 python3 tests/test_mutex.py \
-    --scoreboard 3.227.138.6:5678 \
-    --coordinator 35.173.215.251:5679 \
+    --scoreboard 44.211.92.88:5678 \
+    --coordinator 3.215.153.77:5679 \
     --players 3 --rounds 5 --instance-id peer3
 ```
 
@@ -103,7 +103,7 @@ python3 coordinator/coordinator.py --host 0.0.0.0 --port 5679
 
 # Terminal 2
 python3 client/client_mutex.py \
-    --scoreboard 3.227.138.6:5678 \
+    --scoreboard 44.211.92.88:5678 \
     --coordinator localhost:5679 \
     --player P1 --rounds 5
 ```
@@ -111,16 +111,16 @@ python3 client/client_mutex.py \
 **instância-peer2:**
 ```bash
 python3 client/client_mutex.py \
-    --scoreboard 3.227.138.6:5678 \
-    --coordinator 35.173.215.251:5679 \
+    --scoreboard 44.211.92.88:5678 \
+    --coordinator 3.215.153.77:5679 \
     --player P2 --rounds 5
 ```
 
 **instância-peer3:**
 ```bash
 python3 client/client_mutex.py \
-    --scoreboard 3.227.138.6:5678 \
-    --coordinator 35.173.215.251:5679 \
+    --scoreboard 44.211.92.88:5678 \
+    --coordinator 3.215.153.77:5679 \
     --player P3 --rounds 5
 ```
 
