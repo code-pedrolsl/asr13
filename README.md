@@ -64,7 +64,7 @@ python3 coordinator/coordinator.py --host 0.0.0.0 --port 5679
 python3 tests/test_mutex.py \
     --scoreboard 44.211.92.88:5678 \
     --coordinator localhost:5679 \
-    --players 3 --rounds 5 --instance-id peer1
+    --players 3 --rounds 5 --instance-id peer1 --think 5
 ```
 
 **instância-peer2:**
@@ -72,7 +72,7 @@ python3 tests/test_mutex.py \
 python3 tests/test_mutex.py \
     --scoreboard 44.211.92.88:5678 \
     --coordinator 3.215.153.77:5679 \
-    --players 3 --rounds 5 --instance-id peer2
+    --players 3 --rounds 5 --instance-id peer2 --think 5
 ```
 
 **instância-peer3:**
@@ -80,7 +80,7 @@ python3 tests/test_mutex.py \
 python3 tests/test_mutex.py \
     --scoreboard 44.211.92.88:5678 \
     --coordinator 3.215.153.77:5679 \
-    --players 3 --rounds 5 --instance-id peer3
+    --players 3 --rounds 5 --instance-id peer3 --think 5
 ```
 
 > Rode peer1, peer2 e peer3 ao mesmo tempo.  
