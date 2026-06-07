@@ -1,16 +1,3 @@
-"""
-Teste de Exclusão Mútua — ASR 13
-==================================
-Roda N clientes simultâneos usando o coordenador centralizado.
-Compara com ASR 12: aqui conflitos OCC devem ser ZERO.
-
-Uso:
-    python tests/test_mutex.py \
-        --scoreboard <IP>:5678 \
-        --coordinator <IP>:50052 \
-        --players 5 --rounds 10 --instance-id aws-1
-"""
-
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'client'))
@@ -71,7 +58,7 @@ def worker(sb_addr, coord_addr, player_id, game_id,
 def run_test(sb_addr, coord_addr, n_players, game_id,
              rounds, min_pts, max_pts, think_time, instance_id):
 
-    log.info("TESTE EXCLUSÃO MÚTUA — %d jogadores, %d rodadas cada", n_players, rounds)
+    log.info("TESTE EXCLUSÃO MÚTUA - %d jogadores, %d rodadas cada", n_players, rounds)
     log.info("Scoreboard : %s", sb_addr)
     log.info("Coordenador: %s", coord_addr)
     log.info("Instância  : %s", instance_id)
@@ -97,7 +84,7 @@ def run_test(sb_addr, coord_addr, n_players, game_id,
     expected_version = n_players * rounds
 
     log.info("=" * 55)
-    log.info("RESULTADO FINAL — %.2fs", elapsed)
+    log.info("RESULTADO FINAL - %.2fs", elapsed)
     log.info("  Escore final       : %d", final.score)
     log.info("  Versão final       : %d", final.version)
     log.info("  Rodadas executadas : %d", summary["rounds"])
@@ -126,7 +113,7 @@ def run_test(sb_addr, coord_addr, n_players, game_id,
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--scoreboard",   default="localhost:5678")
-    parser.add_argument("--coordinator",  default="localhost:50052")
+    parser.add_argument("--coordinator",  default="localhost:5679")
     parser.add_argument("--players",      type=int,   default=5)
     parser.add_argument("--game",         default="game1")
     parser.add_argument("--rounds",       type=int,   default=10)
