@@ -1,6 +1,5 @@
 # Exclusão Mútua Distribuída — ASR 13
-
-**Disciplina:** INF0344A-BCC — Sistemas Distribuídos  
+ 
 **Middleware:** gRPC  
 **Algoritmo:** Exclusão mútua com coordenador centralizado
 
@@ -10,20 +9,16 @@
 
 ```
 ├── proto/
-│   ├── scoreboard.proto       # Contrato do scoreboard (ASR 12)
 │   └── coordinator.proto      # Contrato do coordenador (ASR 13)
 ├── server/
 │   └── server.py              # Servidor de scoreboard
 ├── coordinator/
 │   └── coordinator.py         # Coordenador de exclusão mútua
 ├── client/
-│   ├── client.py              # Cliente simples (ASR 12, sem mutex)
 │   └── client_mutex.py        # Cliente com exclusão mútua (ASR 13)
 ├── tests/
-│   ├── test_concurrent.py     # Teste automatizado sem mutex (ASR 12)
 │   └── test_mutex.py          # Teste automatizado com mutex (ASR 13)
-├── setup.sh                   # Gera os arquivos gRPC (rodar uma vez)
-└── requirements.txt
+└── setup.sh                   # Gera os arquivos gRPC (rodar uma vez)
 ```
 
 ---
@@ -47,7 +42,7 @@ instância-peer3     → roda cliente (jogador)
 
 Liberar no Security Group:
 - porta **5678** na instância-servidor
-- porta **50052** na instância-peer1
+- porta **5679** na instância-peer1
 
 O IP só é passado na hora de rodar, nos argumentos `--scoreboard` e `--coordinator`.
 
@@ -63,12 +58,12 @@ python3 server/server.py --host 0.0.0.0 --port 5678
 **instância-peer1** (dois terminais):
 ```bash
 # Terminal 1
-python3 coordinator/coordinator.py --host 0.0.0.0 --port 50052
+python3 coordinator/coordinator.py --host 0.0.0.0 --port 5679
 
 # Terminal 2
 python3 tests/test_mutex.py \
     --scoreboard IP_SERVIDOR:5678 \
-    --coordinator localhost:50052 \
+    --coordinator localhost:5679 \
     --players 3 --rounds 10 --instance-id peer1
 ```
 
@@ -76,7 +71,7 @@ python3 tests/test_mutex.py \
 ```bash
 python3 tests/test_mutex.py \
     --scoreboard IP_SERVIDOR:5678 \
-    --coordinator IP_PEER1:50052 \
+    --coordinator IP_PEER1:5679 \
     --players 3 --rounds 10 --instance-id peer2
 ```
 
@@ -84,7 +79,7 @@ python3 tests/test_mutex.py \
 ```bash
 python3 tests/test_mutex.py \
     --scoreboard IP_SERVIDOR:5678 \
-    --coordinator IP_PEER1:50052 \
+    --coordinator IP_PEER1:5679 \
     --players 3 --rounds 10 --instance-id peer3
 ```
 
@@ -104,12 +99,12 @@ python3 server/server.py --host 0.0.0.0 --port 5678
 **instância-peer1** (dois terminais):
 ```bash
 # Terminal 1
-python3 coordinator/coordinator.py --host 0.0.0.0 --port 50052
+python3 coordinator/coordinator.py --host 0.0.0.0 --port 5679
 
 # Terminal 2
 python3 client/client_mutex.py \
     --scoreboard IP_SERVIDOR:5678 \
-    --coordinator localhost:50052 \
+    --coordinator localhost:5679 \
     --player P1 --rounds 10
 ```
 
@@ -117,7 +112,7 @@ python3 client/client_mutex.py \
 ```bash
 python3 client/client_mutex.py \
     --scoreboard IP_SERVIDOR:5678 \
-    --coordinator IP_PEER1:50052 \
+    --coordinator IP_PEER1:5679 \
     --player P2 --rounds 10
 ```
 
@@ -125,7 +120,7 @@ python3 client/client_mutex.py \
 ```bash
 python3 client/client_mutex.py \
     --scoreboard IP_SERVIDOR:5678 \
-    --coordinator IP_PEER1:50052 \
+    --coordinator IP_PEER1:5679 \
     --player P3 --rounds 10
 ```
 
