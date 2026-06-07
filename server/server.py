@@ -83,7 +83,7 @@ class ScoreboardServicer(pb2_grpc.ScoreboardServiceServicer):
                 score=game.score, version=game.version)
 
     def print_stats(self):
-        log.info("=== ESTATÍSTICAS ===")
+        log.info(" Estatísticas ")
         for k, v in self._stats.items():
             log.info("  %-20s %d", k, v)
         for gid, g in self._games.items():
