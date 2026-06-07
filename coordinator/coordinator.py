@@ -1,20 +1,3 @@
-"""
-Coordenador de Exclusão Mútua — Algoritmo Centralizado
-=======================================================
-Qualquer instância pode ser o coordenador (conforme enunciado).
-O coordenador mantém:
-  - quem está com o lock (owner)
-  - fila de quem está esperando
-
-Operações:
-  Acquire -> pede o lock; bloqueia até receber (long polling)
-  Release -> libera o lock
-  Status  -> consulta estado atual (para debug/demo)
-
-Uso:
-    python coordinator.py [--host 0.0.0.0] [--port 50052]
-"""
-
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -30,24 +13,11 @@ log = logging.getLogger(__name__)
 
 
 class CoordinatorServicer(pb2_grpc.CoordinatorServiceServicer):
-    """
-    Algoritmo de Exclusão Mútua com Coordenador Centralizado:
-
-    - Acquire: cliente envia pedido. Se ninguém tem o lock -> concede imediatamente.
-               Se alguém tem -> entra na fila e BLOQUEIA (espera) até ser liberado.
-    - Release: cliente devolve o lock. Coordenador acorda o próximo da fila.
-
-    Garantias:
-      * Apenas UM cliente tem o lock por vez (exclusão mútua)
-      * Ordem FIFO: quem pediu primeiro recebe primeiro (justiça)
-      * Nenhum cliente é ignorado (ausência de starvation)
-    """
-
     def __init__(self):
         self._lock         = threading.Lock()
         self._owner        = None
         self._owner_token  = None
-        self._queue        = []        # lista de (client_id, event, token)
+        self._queue        = []
         self._total_grants = 0
 
     def Acquire(self, request, context):
@@ -57,20 +27,17 @@ class CoordinatorServicer(pb2_grpc.CoordinatorServiceServicer):
 
         with self._lock:
             if self._owner is None:
-                # Lock livre -> concede imediatamente
                 self._owner       = client_id
                 self._owner_token = token
                 self._total_grants += 1
                 log.info("GRANT imediato -> %-12s (token=%s)", client_id, token)
                 return pb2.AcquireResponse(granted=True, token=token, queue_pos=0)
             else:
-                # Lock ocupado -> entra na fila
                 pos = len(self._queue) + 1
                 self._queue.append((client_id, event, token))
                 log.info("FILA  posição=%-2d  cliente=%-12s  (dono atual: %s)",
                          pos, client_id, self._owner)
 
-        # Bloqueia aqui até o coordenador sinalizar via event.set()
         event.wait(timeout=120)
 
         if not event.is_set():
@@ -98,7 +65,6 @@ class CoordinatorServicer(pb2_grpc.CoordinatorServiceServicer):
             self._owner_token = None
 
             if self._queue:
-                # Acorda o próximo da fila
                 next_client, next_event, next_token = self._queue.pop(0)
                 self._owner       = next_client
                 self._owner_token = next_token
