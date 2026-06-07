@@ -7,9 +7,9 @@ O coordenador mantém:
   - fila de quem está esperando
 
 Operações:
-  Acquire → pede o lock; bloqueia até receber (long polling)
-  Release → libera o lock
-  Status  → consulta estado atual (para debug/demo)
+  Acquire -> pede o lock; bloqueia até receber (long polling)
+  Release -> libera o lock
+  Status  -> consulta estado atual (para debug/demo)
 
 Uso:
     python coordinator.py [--host 0.0.0.0] [--port 50052]
@@ -33,8 +33,8 @@ class CoordinatorServicer(pb2_grpc.CoordinatorServiceServicer):
     """
     Algoritmo de Exclusão Mútua com Coordenador Centralizado:
 
-    - Acquire: cliente envia pedido. Se ninguém tem o lock → concede imediatamente.
-               Se alguém tem → entra na fila e BLOQUEIA (espera) até ser liberado.
+    - Acquire: cliente envia pedido. Se ninguém tem o lock -> concede imediatamente.
+               Se alguém tem -> entra na fila e BLOQUEIA (espera) até ser liberado.
     - Release: cliente devolve o lock. Coordenador acorda o próximo da fila.
 
     Garantias:
@@ -57,14 +57,14 @@ class CoordinatorServicer(pb2_grpc.CoordinatorServiceServicer):
 
         with self._lock:
             if self._owner is None:
-                # Lock livre → concede imediatamente
+                # Lock livre -> concede imediatamente
                 self._owner       = client_id
                 self._owner_token = token
                 self._total_grants += 1
-                log.info("GRANT imediato → %-12s (token=%s)", client_id, token)
+                log.info("GRANT imediato -> %-12s (token=%s)", client_id, token)
                 return pb2.AcquireResponse(granted=True, token=token, queue_pos=0)
             else:
-                # Lock ocupado → entra na fila
+                # Lock ocupado -> entra na fila
                 pos = len(self._queue) + 1
                 self._queue.append((client_id, event, token))
                 log.info("FILA  posição=%-2d  cliente=%-12s  (dono atual: %s)",
@@ -80,7 +80,7 @@ class CoordinatorServicer(pb2_grpc.CoordinatorServiceServicer):
                                if c != client_id]
             return pb2.AcquireResponse(granted=False, token="", queue_pos=-1)
 
-        log.info("GRANT após fila → %-12s (token=%s)", client_id, token)
+        log.info("GRANT após fila -> %-12s (token=%s)", client_id, token)
         return pb2.AcquireResponse(granted=True, token=token, queue_pos=0)
 
     def Release(self, request, context):
@@ -93,7 +93,7 @@ class CoordinatorServicer(pb2_grpc.CoordinatorServiceServicer):
                 log.warning(msg)
                 return pb2.ReleaseResponse(success=False, message=msg)
 
-            log.info("RELEASE ← %-12s", client_id)
+            log.info("RELEASE <- %-12s", client_id)
             self._owner       = None
             self._owner_token = None
 
@@ -103,7 +103,7 @@ class CoordinatorServicer(pb2_grpc.CoordinatorServiceServicer):
                 self._owner       = next_client
                 self._owner_token = next_token
                 self._total_grants += 1
-                log.info("GRANT próximo → %-12s (token=%s)  fila restante=%d",
+                log.info("GRANT próximo -> %-12s (token=%s)  fila restante=%d",
                          next_client, next_token, len(self._queue))
                 next_event.set()
 
