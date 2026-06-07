@@ -1,19 +1,3 @@
-"""
-Cliente com Exclusão Mútua — ASR 13
-=====================================
-Diferença em relação à ASR 12:
-  Antes (OCC): tentava escrever, conflito → retry
-  Agora (Mutex): pede permissão ao coordenador ANTES de entrar
-                 na seção crítica. Só um cliente executa por vez.
-
-Seção crítica:
-    [Acquire] → GetScore → Calcular → UpdateScore → [Release]
-
-Uso:
-    python client_mutex.py --scoreboard <IP>:5678 --coordinator <IP>:50052 \
-        --player P1 --rounds 10
-"""
-
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -65,7 +49,7 @@ class MutexClient:
     def update_score(self, points_gained: int):
         self.total_rounds += 1
 
-        # ── SEÇÃO CRÍTICA ──────────────────────────────────────────
+        # SEÇÃO CRÍTICA
         token = self._acquire()
         try:
             # 1. Consultar escore
@@ -90,7 +74,7 @@ class MutexClient:
                 # Com mutex correto isso NUNCA deve acontecer
                 self.log.error("ERRO INESPERADO (mutex falhou?): %s", resp.message)
         finally:
-            # ── FIM DA SEÇÃO CRÍTICA — sempre libera ───────────────
+            #  FIM DA SEÇÃO CRÍTICA
             self._release(token)
 
     def play(self, rounds: int, min_pts: int = 10, max_pts: int = 100,
