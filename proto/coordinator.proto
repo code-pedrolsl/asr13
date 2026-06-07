@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package coordinator;
+
+message AcquireRequest {
+  string client_id = 1;
+}
+
+message AcquireResponse {
+  bool   granted    = 1;
+  string token      = 2;
+  int32  queue_pos  = 3;
+}
+
+message ReleaseRequest {
+  string client_id = 1;
+  string token     = 2;
+}
+
+message ReleaseResponse {
+  bool   success = 1;
+  string message = 2;
+}
+
+message StatusRequest {}
+
+message StatusResponse {
+  string owner       = 1;
+  int32  queue_size  = 2;
+  repeated string queue = 3;
+  int64  total_grants = 4;
+}
+
+service CoordinatorService {
+  rpc Acquire (AcquireRequest)  returns (AcquireResponse);
+  rpc Release (ReleaseRequest)  returns (ReleaseResponse);
+  rpc Status  (StatusRequest)   returns (StatusResponse);
+}
