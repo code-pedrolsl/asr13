@@ -62,25 +62,25 @@ python3 coordinator/coordinator.py --host 0.0.0.0 --port 5679
 
 # Terminal 2
 python3 tests/test_mutex.py \
-    --scoreboard IP_SERVIDOR:5678 \
+    --scoreboard 3.227.138.6:5678 \
     --coordinator localhost:5679 \
-    --players 3 --rounds 10 --instance-id peer1
+    --players 3 --rounds 5 --instance-id peer1
 ```
 
 **instância-peer2:**
 ```bash
 python3 tests/test_mutex.py \
-    --scoreboard IP_SERVIDOR:5678 \
-    --coordinator IP_PEER1:5679 \
-    --players 3 --rounds 10 --instance-id peer2
+    --scoreboard 3.227.138.6:5678 \
+    --coordinator 35.173.215.251:5679 \
+    --players 3 --rounds 5 --instance-id peer2
 ```
 
 **instância-peer3:**
 ```bash
 python3 tests/test_mutex.py \
-    --scoreboard IP_SERVIDOR:5678 \
-    --coordinator IP_PEER1:5679 \
-    --players 3 --rounds 10 --instance-id peer3
+    --scoreboard 3.227.138.6:5678 \
+    --coordinator 35.173.215.251:5679 \
+    --players 3 --rounds 5 --instance-id peer3
 ```
 
 > Rode peer1, peer2 e peer3 ao mesmo tempo.  
@@ -103,25 +103,25 @@ python3 coordinator/coordinator.py --host 0.0.0.0 --port 5679
 
 # Terminal 2
 python3 client/client_mutex.py \
-    --scoreboard IP_SERVIDOR:5678 \
+    --scoreboard 3.227.138.6:5678 \
     --coordinator localhost:5679 \
-    --player P1 --rounds 10
+    --player P1 --rounds 5
 ```
 
 **instância-peer2:**
 ```bash
 python3 client/client_mutex.py \
-    --scoreboard IP_SERVIDOR:5678 \
-    --coordinator IP_PEER1:5679 \
-    --player P2 --rounds 10
+    --scoreboard 3.227.138.6:5678 \
+    --coordinator 35.173.215.251:5679 \
+    --player P2 --rounds 5
 ```
 
 **instância-peer3:**
 ```bash
 python3 client/client_mutex.py \
-    --scoreboard IP_SERVIDOR:5678 \
-    --coordinator IP_PEER1:5679 \
-    --player P3 --rounds 10
+    --scoreboard 3.227.138.6:5678 \
+    --coordinator 35.173.215.251:5679 \
+    --player P3 --rounds 5
 ```
 
 > Rode peer1, peer2 e peer3 ao mesmo tempo.
